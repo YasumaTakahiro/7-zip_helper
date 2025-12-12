@@ -27,7 +27,7 @@
 ## ファイル構成
 
 ```
-unzip_to_extract/
+7-zip_helper/
 ├── unarchive.bat                 # 解凍用バッチファイル（エントリーポイント）
 ├── unarchive.ps1                 # 解凍用PowerShellスクリプト（メイン処理）
 ├── archive.bat                   # 圧縮用バッチファイル（エントリーポイント）
