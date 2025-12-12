@@ -16,23 +16,73 @@ try {
     $scriptDir = $scriptDir.TrimEnd('\')
     
     # JSON設定ファイルのパス（.jsoncまたは.json）
-    $configFile = Join-Path $scriptDir "unzip_to_extract_config.jsonc"
+    $configFile = Join-Path $scriptDir "archive_config.jsonc"
     if (-not (Test-Path $configFile)) {
-        $configFile = Join-Path $scriptDir "unzip_to_extract_config.json"
+        $configFile = Join-Path $scriptDir "archive_config.json"
     }
     
     # JSON設定ファイルから設定を読み込む
     $ZIP_EXE_DIR = $null
     $DEST_DIR = $null
+    $CLOSE_DELAY_MS = 3000  # デフォルト: 3秒（3000ミリ秒）
     
     if (Test-Path $configFile) {
         try {
             # JSONファイルを読み込み、コメントを削除してからパース
             $jsonContent = Get-Content $configFile -Raw -Encoding UTF8
-            # 行コメント（//）を削除
-            $jsonContent = $jsonContent -replace '//.*', ''
+            
+            # より安全なコメント削除処理
             # ブロックコメント（/* */）を削除
-            $jsonContent = $jsonContent -replace '/\*[\s\S]*?\*/', ''
+            while ($jsonContent -match '/\*[\s\S]*?\*/') {
+                $jsonContent = $jsonContent -replace '/\*[\s\S]*?\*/', ''
+            }
+            
+            # 行コメント（//）を削除（文字列内を除く）
+            $lines = $jsonContent -split "`r?`n"
+            $cleanedLines = @()
+            foreach ($line in $lines) {
+                $inString = $false
+                $escaped = $false
+                $result = ""
+                for ($i = 0; $i -lt $line.Length; $i++) {
+                    $char = $line[$i]
+                    
+                    if ($escaped) {
+                        $result += $char
+                        $escaped = $false
+                        continue
+                    }
+                    
+                    if ($char -eq '\') {
+                        $escaped = $true
+                        $result += $char
+                        continue
+                    }
+                    
+                    if ($char -eq '"') {
+                        $inString = -not $inString
+                        $result += $char
+                        continue
+                    }
+                    
+                    if (-not $inString -and $char -eq '/' -and $i + 1 -lt $line.Length -and $line[$i + 1] -eq '/') {
+                        # 行コメントの開始
+                        break
+                    }
+                    
+                    $result += $char
+                }
+                # 行末の空白を削除
+                $result = $result.TrimEnd()
+                if ($result.Length -gt 0) {
+                    $cleanedLines += $result
+                }
+            }
+            $jsonContent = $cleanedLines -join "`n"
+            
+            # 末尾のカンマを削除（JSONの最後のプロパティの後のカンマ）
+            $jsonContent = $jsonContent -replace ',\s*}', '}'
+            $jsonContent = $jsonContent -replace ',\s*]', ']'
             
             $config = $jsonContent | ConvertFrom-Json
             if ($config.zipExeDir) {
@@ -44,6 +94,9 @@ try {
                 $DEST_DIR = $config.destDir
                 # 環境変数を展開
                 $DEST_DIR = [System.Environment]::ExpandEnvironmentVariables($DEST_DIR)
+            }
+            if ($config.closeDelayMs) {
+                $CLOSE_DELAY_MS = $config.closeDelayMs
             }
             Write-Host "[INFO] 設定ファイルを読み込みました: $configFile"
         }
@@ -59,7 +112,7 @@ try {
     $zipPath = $args[1]
 
     if (-not $ZIP_EXE_DIR) {
-        Write-Host "[ERROR] 7-Zipのディレクトリが指定されていません。設定ファイル（unzip_to_extract_config.json）でzipExeDirを指定してください。"
+        Write-Host "[ERROR] 7-Zipのディレクトリが指定されていません。設定ファイル（archive_config.jsonc）でzipExeDirを指定してください。"
         pause
         exit 1
     }
@@ -124,6 +177,7 @@ try {
     Write-Host "  7-Zipのディレクトリ: $ZIP_EXE_DIR"
     Write-Host "  7-Zipのパス: $ZIP_EXE"
     Write-Host "  解凍先フォルダ: $DEST_DIR"
+    Write-Host "  コンソール閉じるまでの待機時間: $CLOSE_DELAY_MS ミリ秒"
     Write-Host "  ZIPファイル: $zipPath"
     Write-Host ""
 
@@ -219,27 +273,38 @@ try {
             $tempExtractDir = Join-Path $env:TEMP "unzip_temp_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
             $extractProcess = Start-Process -FilePath $ZIP_EXE -ArgumentList "x", "`"$zipPath`"", "-o`"$tempExtractDir`"", "-y" -NoNewWindow -Wait -PassThru
             
-            if ($extractProcess.ExitCode -eq 0) {
-                # 解凍されたルートフォルダをリネームして移動
-                $extractedRootFolder = Join-Path $tempExtractDir $rootFolderName
-                if (Test-Path $extractedRootFolder) {
-                    Move-Item -Path $extractedRootFolder -Destination $targetRootFolder -Force
-                    # 移動後にフォルダの作成日時を現在の日時に設定
-                    (Get-Item $targetRootFolder).CreationTime = Get-Date
-                    (Get-Item $targetRootFolder).LastWriteTime = Get-Date
-                }
-                # 一時フォルダを削除
+            if ($extractProcess.ExitCode -ne 0) {
+                Write-Host "[ERROR] 解凍に失敗しました。終了コード: $($extractProcess.ExitCode)"
                 Remove-Item $tempExtractDir -Recurse -Force -ErrorAction SilentlyContinue
+                Remove-Item $tempListFile -ErrorAction SilentlyContinue
+                pause
+                exit 1
             }
+            
+            # 解凍されたルートフォルダをリネームして移動
+            $extractedRootFolder = Join-Path $tempExtractDir $rootFolderName
+            if (Test-Path $extractedRootFolder) {
+                Move-Item -Path $extractedRootFolder -Destination $targetRootFolder -Force
+                # 移動後にフォルダの作成日時を現在の日時に設定
+                (Get-Item $targetRootFolder).CreationTime = Get-Date
+                (Get-Item $targetRootFolder).LastWriteTime = Get-Date
+            }
+            # 一時フォルダを削除
+            Remove-Item $tempExtractDir -Recurse -Force -ErrorAction SilentlyContinue
         } else {
             $extractProcess = Start-Process -FilePath $ZIP_EXE -ArgumentList "x", "`"$zipPath`"", "-o`"$DEST_DIR`"", "-y" -NoNewWindow -Wait -PassThru
             
-            if ($extractProcess.ExitCode -eq 0) {
-                # 解凍後にフォルダの作成日時を現在の日時に設定
-                if (Test-Path $targetRootFolder) {
-                    (Get-Item $targetRootFolder).CreationTime = Get-Date
-                    (Get-Item $targetRootFolder).LastWriteTime = Get-Date
-                }
+            if ($extractProcess.ExitCode -ne 0) {
+                Write-Host "[ERROR] 解凍に失敗しました。終了コード: $($extractProcess.ExitCode)"
+                Remove-Item $tempListFile -ErrorAction SilentlyContinue
+                pause
+                exit 1
+            }
+            
+            # 解凍後にフォルダの作成日時を現在の日時に設定
+            if (Test-Path $targetRootFolder) {
+                (Get-Item $targetRootFolder).CreationTime = Get-Date
+                (Get-Item $targetRootFolder).LastWriteTime = Get-Date
             }
         }
     } else {
@@ -261,20 +326,18 @@ try {
         
         $extractProcess = Start-Process -FilePath $ZIP_EXE -ArgumentList "x", "`"$zipPath`"", "-o`"$targetDir`"", "-y" -NoNewWindow -Wait -PassThru
         
-        if ($extractProcess.ExitCode -eq 0) {
-            # 解凍後にフォルダの作成日時を現在の日時に設定
-            if (Test-Path $targetDir) {
-                (Get-Item $targetDir).CreationTime = Get-Date
-                (Get-Item $targetDir).LastWriteTime = Get-Date
-            }
+        if ($extractProcess.ExitCode -ne 0) {
+            Write-Host "[ERROR] 解凍に失敗しました。終了コード: $($extractProcess.ExitCode)"
+            Remove-Item $tempListFile -ErrorAction SilentlyContinue
+            pause
+            exit 1
         }
-    }
-
-    if ($extractProcess.ExitCode -ne 0) {
-        Write-Host "[ERROR] 解凍に失敗しました。終了コード: $($extractProcess.ExitCode)"
-        Remove-Item $tempListFile -ErrorAction SilentlyContinue
-        pause
-        exit 1
+        
+        # 解凍後にフォルダの作成日時を現在の日時に設定
+        if (Test-Path $targetDir) {
+            (Get-Item $targetDir).CreationTime = Get-Date
+            (Get-Item $targetDir).LastWriteTime = Get-Date
+        }
     }
 
     # 一時ファイルを削除
@@ -282,8 +345,13 @@ try {
 
     Write-Host "解凍完了。"
     Write-Host ""
-    Write-Host "3秒後に自動的に閉じます..."
-    Start-Sleep -Seconds 3
+    if ($CLOSE_DELAY_MS -gt 0) {
+        $seconds = [math]::Round($CLOSE_DELAY_MS / 1000, 1)
+        Write-Host ("{0}秒後に自動的に閉じます..." -f $seconds)
+        Start-Sleep -Milliseconds $CLOSE_DELAY_MS
+    } else {
+        Write-Host "自動的に閉じます..."
+    }
 }
 catch {
     Write-Host "[ERROR] エラーが発生しました: $($_.Exception.Message)"

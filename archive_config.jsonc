@@ -1,0 +1,20 @@
+{
+  // 7-Zipのインストールディレクトリ（環境変数を使用可能）
+  "zipExeDir": "%PROGRAMFILES%\\7-Zip",
+  
+  // 解凍先フォルダ（環境変数を使用可能、空の場合はZIPファイルと同じ階層に解凍）
+  "destDir": "%USERPROFILE%\\Downloads",
+  
+  // 圧縮先フォルダ（環境変数を使用可能、空の場合は圧縮対象と同じ階層に圧縮）
+  "compressDestDir": "",
+  
+  // 圧縮時のパスワード（オプション、設定しない場合はパスワードなしで圧縮）
+  "password": "",
+  
+  // 圧縮形式（7z, zip, gzip, bzip2, tar, wim, xz など、デフォルト: zip）
+  "compressFormat": "zip",
+  
+  // 実行後コンソールが閉じるまでの待機時間（ミリ秒、デフォルト: 3000）
+  "closeDelayMs": 3000
+}
+

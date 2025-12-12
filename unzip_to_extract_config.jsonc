@@ -1,8 +1,0 @@
-{
-  // 7-Zipのインストールディレクトリ（環境変数を使用可能）
-  "zipExeDir": "%PROGRAMFILES%\\7-Zip",
-  
-  // 解凍先フォルダ（環境変数を使用可能、空の場合はZIPファイルと同じ階層に解凍）
-  "destDir": "%USERPROFILE%\\Downloads"
-}
-
