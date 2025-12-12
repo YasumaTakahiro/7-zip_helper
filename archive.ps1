@@ -6,12 +6,53 @@ $OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = "Stop"
 
 try {
-    # スクリプトのディレクトリを引数から取得
-    $scriptDir = $args[0]
-    if ([string]::IsNullOrWhiteSpace($scriptDir)) {
-        # フォールバック: 現在のディレクトリを使用
-        $scriptDir = Get-Location
+    # スクリプトのディレクトリを取得
+    # バッチファイル経由の場合は引数の最初の要素がスクリプトディレクトリ
+    $scriptDir = $null
+    
+    # まず、環境変数から取得を試みる（archive.batで設定される）
+    $envScriptDir = $env:ARCHIVE_SCRIPT_DIR
+    if ($envScriptDir -and -not [string]::IsNullOrWhiteSpace($envScriptDir)) {
+        $potentialScriptDir = $envScriptDir.TrimEnd('\')
+        if (Test-Path $potentialScriptDir -PathType Container) {
+            $configFileCheck = Join-Path $potentialScriptDir "archive_config.jsonc"
+            if (Test-Path $configFileCheck) {
+                $scriptDir = $potentialScriptDir
+            }
+        }
     }
+    
+    # 環境変数から取得できなかった場合、引数から取得を試みる（バッチファイル経由の場合）
+    if (-not $scriptDir -and $args.Count -gt 0 -and -not [string]::IsNullOrWhiteSpace($args[0])) {
+        $potentialScriptDir = $args[0].TrimEnd('\')
+        # スクリプトディレクトリの可能性があるかチェック（ディレクトリが存在し、archive_config.jsoncが存在する）
+        if (Test-Path $potentialScriptDir -PathType Container) {
+            $configFileCheck = Join-Path $potentialScriptDir "archive_config.jsonc"
+            if (Test-Path $configFileCheck) {
+                $scriptDir = $potentialScriptDir
+            }
+        }
+    }
+    
+    # 引数から取得できなかった場合、他の方法を試す
+    if (-not $scriptDir) {
+        # $PSScriptRootが利用可能な場合はそれを使用
+        if ($PSScriptRoot) {
+            $scriptDir = $PSScriptRoot
+        } elseif ($args.Count -gt 0) {
+            # archive.batから渡されたスクリプトディレクトリを再試行（存在チェックなし）
+            $potentialScriptDir = $args[0].TrimEnd('\')
+            if (-not [string]::IsNullOrWhiteSpace($potentialScriptDir)) {
+                $scriptDir = $potentialScriptDir
+            }
+        }
+        
+        if (-not $scriptDir) {
+            # 最後のフォールバック: 現在のディレクトリを使用
+            $scriptDir = (Get-Location).Path
+        }
+    }
+    
     # 末尾のバックスラッシュを削除
     $scriptDir = $scriptDir.TrimEnd('\')
     
@@ -116,8 +157,42 @@ try {
         Write-Host "[警告] デフォルトの設定を使用します。" -ForegroundColor Yellow
     }
     
-    # 圧縮対象のパスを引数から取得
-    $targetPath = $args[1]
+    # 圧縮対象のパスとパスワード無効化フラグを引数から取得
+    # 引数の順序に関係なく処理できるようにする
+    $targetPath = $null
+    $noPassword = $false
+    
+    # パスワード無効化フラグを検出
+    $passwordFlags = @("--no-password", "-nopass", "/nopass")
+    $filteredArgs = @()
+    
+    foreach ($arg in $args) {
+        # 引数を文字列として正規化（トリム）
+        $argStr = $arg.ToString().Trim()
+        
+        # パスワードフラグかどうかをチェック（大文字小文字を区別しない）
+        $isPasswordFlag = $false
+        foreach ($flag in $passwordFlags) {
+            if ($argStr -eq $flag -or $argStr -ieq $flag) {
+                $isPasswordFlag = $true
+                $noPassword = $true
+                break
+            }
+        }
+        
+        if (-not $isPasswordFlag) {
+            $filteredArgs += $arg
+        }
+    }
+    
+    # スクリプトディレクトリ（$args[0]または$filteredArgs[0]）を除いた最初の引数が圧縮対象のパス
+    # $filteredArgs[0]がスクリプトディレクトリ、$filteredArgs[1]が圧縮対象のパス
+    if ($filteredArgs.Count -ge 2) {
+        $targetPath = $filteredArgs[1]
+    } elseif ($filteredArgs.Count -eq 1) {
+        # スクリプトディレクトリのみの場合（引数なし）
+        $targetPath = $null
+    }
 
     if (-not $ZIP_EXE_DIR) {
         Write-Host "[ERROR] 7-Zipのディレクトリが指定されていません。設定ファイル（archive_config.jsonc）でzipExeDirを指定してください。"
@@ -127,16 +202,12 @@ try {
     
     if (-not $targetPath) {
         Write-Host "[ERROR] 圧縮対象のファイルまたはフォルダが指定されていません。"
-        Write-Host "[DEBUG] 引数の数: $($args.Count)"
-        Write-Host "[DEBUG] 引数の内容: $($args | ConvertTo-Json)"
         pause
         exit 1
     }
 
     # パスを正規化（引用符を削除）
     $targetPath = $targetPath.Trim([char]34)
-    
-    Write-Host "[DEBUG] 処理前のパス: [$targetPath]"
 
     # 7-Zipのディレクトリの存在確認
     $ZIP_EXE_DIR = $ZIP_EXE_DIR.Trim([char]34)
@@ -281,10 +352,12 @@ try {
     # 7-Zipで圧縮
     $arguments = @("a", "-t$COMPRESS_FORMAT", "`"$archiveFilePath`"", "`"$compressTarget`"")
     
-    # パスワードが設定されている場合、パスワードオプションを追加
-    if ($PASSWORD) {
+    # パスワードが設定されている場合、パスワードオプションを追加（--no-passwordフラグが指定されていない場合のみ）
+    if ($PASSWORD -and -not $noPassword) {
         $arguments += "-p$PASSWORD"
         Write-Host "[INFO] パスワード付きで圧縮します。"
+    } elseif ($noPassword) {
+        Write-Host "[INFO] パスワード無効化フラグが指定されました。パスワードなしで圧縮します。"
     }
     
     # 7-Zipの出力を適切なエンコーディングで読み込むため、一時ファイルにリダイレクト

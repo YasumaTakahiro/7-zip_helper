@@ -9,12 +9,12 @@
   "compressDestDir": "",
   
   // 圧縮時のパスワード（オプション、設定しない場合はパスワードなしで圧縮）
-  "password": "",
+  "password": "12",
   
   // 圧縮形式（7z, zip, gzip, bzip2, tar, wim, xz など、デフォルト: zip）
   "compressFormat": "zip",
   
   // 実行後コンソールが閉じるまでの待機時間（ミリ秒、デフォルト: 3000）
-  "closeDelayMs": 3000
+  "closeDelayMs": 30000
 }
 
