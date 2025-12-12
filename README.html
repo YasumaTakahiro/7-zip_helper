@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x30a2;&#x30fc;&#x30ab;&#x30a4;&#x30d6;&#x64cd;&#x4f5c;&#x30c4;&#x30fc;&#x30eb;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+/* From extension bierner.markdown-preview-github-styles */
+body {
+    background: white;
+}
+
+.vscode-body {
+    box-sizing: border-box;
+    min-width: 200px;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 40px;
+    border: 1px solid transparent;
+}
+
+.vscode-body blockquote {
+    background-color: initial;
+}
+
+.vscode-body pre {
+    color: initial;
+    background: #f7f7f7 !important;
+}
+
+.vscode-body code {
+    color: inherit;
+}
+
+.vscode-body pre code {
+    color: initial;
+}
+
+.vscode-body code > div {
+    background: none
+}
+
+.vscode-body table th,
+.vscode-body table td {
+    border: 1px solid #ddd !important;
+}
+
+.vscode-body.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-body.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-body.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-body p,
+.vscode-body blockquote,
+.vscode-body ul,
+.vscode-body ol,
+.vscode-body dl,
+.vscode-body table,
+.vscode-body pre {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+body.vscode-body::-webkit-scrollbar {
+    background-color: white;
+}
+body.vscode-body::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.4);
+}
+body.vscode-body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(100, 100, 100, 0.7);
+}
+
+/* Generated from 'node_modules/github-markdown-css/github-markdown.css' */
+@font-face {
+  font-family: octicons-link;
+  src: url(data:font/woff;charset=utf-8;base64,d09GRgABAAAAAAZwABAAAAAACFQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEU0lHAAAGaAAAAAgAAAAIAAAAAUdTVUIAAAZcAAAACgAAAAoAAQAAT1MvMgAAAyQAAABJAAAAYFYEU3RjbWFwAAADcAAAAEUAAACAAJThvmN2dCAAAATkAAAABAAAAAQAAAAAZnBnbQAAA7gAAACyAAABCUM+8IhnYXNwAAAGTAAAABAAAAAQABoAI2dseWYAAAFsAAABPAAAAZwcEq9taGVhZAAAAsgAAAA0AAAANgh4a91oaGVhAAADCAAAABoAAAAkCA8DRGhtdHgAAAL8AAAADAAAAAwGAACfbG9jYQAAAsAAAAAIAAAACABiATBtYXhwAAACqAAAABgAAAAgAA8ASm5hbWUAAAToAAABQgAAAlXu73sOcG9zdAAABiwAAAAeAAAAME3QpOBwcmVwAAAEbAAAAHYAAAB/aFGpk3jaTY6xa8JAGMW/O62BDi0tJLYQincXEypYIiGJjSgHniQ6umTsUEyLm5BV6NDBP8Tpts6F0v+k/0an2i+itHDw3v2+9+DBKTzsJNnWJNTgHEy4BgG3EMI9DCEDOGEXzDADU5hBKMIgNPZqoD3SilVaXZCER3/I7AtxEJLtzzuZfI+VVkprxTlXShWKb3TBecG11rwoNlmmn1P2WYcJczl32etSpKnziC7lQyWe1smVPy/Lt7Kc+0vWY/gAgIIEqAN9we0pwKXreiMasxvabDQMM4riO+qxM2ogwDGOZTXxwxDiycQIcoYFBLj5K3EIaSctAq2kTYiw+ymhce7vwM9jSqO8JyVd5RH9gyTt2+J/yUmYlIR0s04n6+7Vm1ozezUeLEaUjhaDSuXHwVRgvLJn1tQ7xiuVv/ocTRF42mNgZGBgYGbwZOBiAAFGJBIMAAizAFoAAABiAGIAznjaY2BkYGAA4in8zwXi+W2+MjCzMIDApSwvXzC97Z4Ig8N/BxYGZgcgl52BCSQKAA3jCV8CAABfAAAAAAQAAEB42mNgZGBg4f3vACQZQABIMjKgAmYAKEgBXgAAeNpjYGY6wTiBgZWBg2kmUxoDA4MPhGZMYzBi1AHygVLYQUCaawqDA4PChxhmh/8ODDEsvAwHgMKMIDnGL0x7gJQCAwMAJd4MFwAAAHjaY2BgYGaA4DAGRgYQkAHyGMF8NgYrIM3JIAGVYYDT+AEjAwuDFpBmA9KMDEwMCh9i/v8H8sH0/4dQc1iAmAkALaUKLgAAAHjaTY9LDsIgEIbtgqHUPpDi3gPoBVyRTmTddOmqTXThEXqrob2gQ1FjwpDvfwCBdmdXC5AVKFu3e5MfNFJ29KTQT48Ob9/lqYwOGZxeUelN2U2R6+cArgtCJpauW7UQBqnFkUsjAY/kOU1cP+DAgvxwn1chZDwUbd6CFimGXwzwF6tPbFIcjEl+vvmM/byA48e6tWrKArm4ZJlCbdsrxksL1AwWn/yBSJKpYbq8AXaaTb8AAHja28jAwOC00ZrBeQNDQOWO//sdBBgYGRiYWYAEELEwMTE4uzo5Zzo5b2BxdnFOcALxNjA6b2ByTswC8jYwg0VlNuoCTWAMqNzMzsoK1rEhNqByEyerg5PMJlYuVueETKcd/89uBpnpvIEVomeHLoMsAAe1Id4AAAAAAAB42oWQT07CQBTGv0JBhagk7HQzKxca2sJCE1hDt4QF+9JOS0nbaaYDCQfwCJ7Au3AHj+LO13FMmm6cl7785vven0kBjHCBhfpYuNa5Ph1c0e2Xu3jEvWG7UdPDLZ4N92nOm+EBXuAbHmIMSRMs+4aUEd4Nd3CHD8NdvOLTsA2GL8M9PODbcL+hD7C1xoaHeLJSEao0FEW14ckxC+TU8TxvsY6X0eLPmRhry2WVioLpkrbp84LLQPGI7c6sOiUzpWIWS5GzlSgUzzLBSikOPFTOXqly7rqx0Z1Q5BAIoZBSFihQYQOOBEdkCOgXTOHA07HAGjGWiIjaPZNW13/+lm6S9FT7rLHFJ6fQbkATOG1j2OFMucKJJsxIVfQORl+9Jyda6Sl1dUYhSCm1dyClfoeDve4qMYdLEbfqHf3O/AdDumsjAAB42mNgYoAAZQYjBmyAGYQZmdhL8zLdDEydARfoAqIAAAABAAMABwAKABMAB///AA8AAQAAAAAAAAAAAAAAAAABAAAAAA==) format('woff');
+}
+
+.vscode-body {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  line-height: 1.5;
+  color: #24292e;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.vscode-body .pl-c {
+  color: #6a737d;
+}
+
+.vscode-body .pl-c1,
+.vscode-body .pl-s .pl-v {
+  color: #005cc5;
+}
+
+.vscode-body .pl-e,
+.vscode-body .pl-en {
+  color: #6f42c1;
+}
+
+.vscode-body .pl-smi,
+.vscode-body .pl-s .pl-s1 {
+  color: #24292e;
+}
+
+.vscode-body .pl-ent {
+  color: #22863a;
+}
+
+.vscode-body .pl-k {
+  color: #d73a49;
+}
+
+.vscode-body .pl-s,
+.vscode-body .pl-pds,
+.vscode-body .pl-s .pl-pse .pl-s1,
+.vscode-body .pl-sr,
+.vscode-body .pl-sr .pl-cce,
+.vscode-body .pl-sr .pl-sre,
+.vscode-body .pl-sr .pl-sra {
+  color: #032f62;
+}
+
+.vscode-body .pl-v,
+.vscode-body .pl-smw {
+  color: #e36209;
+}
+
+.vscode-body .pl-bu {
+  color: #b31d28;
+}
+
+.vscode-body .pl-ii {
+  color: #fafbfc;
+  background-color: #b31d28;
+}
+
+.vscode-body .pl-c2 {
+  color: #fafbfc;
+  background-color: #d73a49;
+}
+
+.vscode-body .pl-c2::before {
+  content: "^M";
+}
+
+.vscode-body .pl-sr .pl-cce {
+  font-weight: bold;
+  color: #22863a;
+}
+
+.vscode-body .pl-ml {
+  color: #735c0f;
+}
+
+.vscode-body .pl-mh,
+.vscode-body .pl-mh .pl-en,
+.vscode-body .pl-ms {
+  font-weight: bold;
+  color: #005cc5;
+}
+
+.vscode-body .pl-mi {
+  font-style: italic;
+  color: #24292e;
+}
+
+.vscode-body .pl-mb {
+  font-weight: bold;
+  color: #24292e;
+}
+
+.vscode-body .pl-md {
+  color: #b31d28;
+  background-color: #ffeef0;
+}
+
+.vscode-body .pl-mi1 {
+  color: #22863a;
+  background-color: #f0fff4;
+}
+
+.vscode-body .pl-mc {
+  color: #e36209;
+  background-color: #ffebda;
+}
+
+.vscode-body .pl-mi2 {
+  color: #f6f8fa;
+  background-color: #005cc5;
+}
+
+.vscode-body .pl-mdr {
+  font-weight: bold;
+  color: #6f42c1;
+}
+
+.vscode-body .pl-ba {
+  color: #586069;
+}
+
+.vscode-body .pl-sg {
+  color: #959da5;
+}
+
+.vscode-body .pl-corl {
+  text-decoration: underline;
+  color: #032f62;
+}
+
+.vscode-body .octicon {
+  display: inline-block;
+  vertical-align: text-top;
+  fill: currentColor;
+}
+
+.vscode-body a {
+  background-color: transparent;
+}
+
+.vscode-body a:active,
+.vscode-body a:hover {
+  outline-width: 0;
+}
+
+.vscode-body strong {
+  font-weight: inherit;
+}
+
+.vscode-body strong {
+  font-weight: bolder;
+}
+
+.vscode-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.vscode-body img {
+  border-style: none;
+}
+
+.vscode-body code,
+.vscode-body kbd,
+.vscode-body pre {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.vscode-body hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
+
+.vscode-body input {
+  font: inherit;
+  margin: 0;
+}
+
+.vscode-body input {
+  overflow: visible;
+}
+
+.vscode-body [type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.vscode-body * {
+  box-sizing: border-box;
+}
+
+.vscode-body input {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.vscode-body a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+.vscode-body a:hover {
+  text-decoration: underline;
+}
+
+.vscode-body strong {
+  font-weight: 600;
+}
+
+.vscode-body hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #dfe2e5;
+}
+
+.vscode-body hr::before {
+  display: table;
+  content: "";
+}
+
+.vscode-body hr::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.vscode-body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+.vscode-body td,
+.vscode-body th {
+  padding: 0;
+}
+
+.vscode-body h1,
+.vscode-body h2,
+.vscode-body h3,
+.vscode-body h4,
+.vscode-body h5,
+.vscode-body h6 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.vscode-body h1 {
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.vscode-body h2 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.vscode-body h3 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.vscode-body h4 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.vscode-body h5 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.vscode-body h6 {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.vscode-body p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.vscode-body blockquote {
+  margin: 0;
+}
+
+.vscode-body ul,
+.vscode-body ol {
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.vscode-body ol ol,
+.vscode-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.vscode-body ul ul ol,
+.vscode-body ul ol ol,
+.vscode-body ol ul ol,
+.vscode-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.vscode-body dd {
+  margin-left: 0;
+}
+
+.vscode-body code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.vscode-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.vscode-body .octicon {
+  vertical-align: text-bottom;
+}
+
+.vscode-body .pl-0 {
+  padding-left: 0 !important;
+}
+
+.vscode-body .pl-1 {
+  padding-left: 4px !important;
+}
+
+.vscode-body .pl-2 {
+  padding-left: 8px !important;
+}
+
+.vscode-body .pl-3 {
+  padding-left: 16px !important;
+}
+
+.vscode-body .pl-4 {
+  padding-left: 24px !important;
+}
+
+.vscode-body .pl-5 {
+  padding-left: 32px !important;
+}
+
+.vscode-body .pl-6 {
+  padding-left: 40px !important;
+}
+
+.vscode-body::before {
+  display: table;
+  content: "";
+}
+
+.vscode-body::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.vscode-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.vscode-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.vscode-body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.vscode-body .anchor {
+  float: left;
+  padding-right: 4px;
+  margin-left: -20px;
+  line-height: 1;
+}
+
+.vscode-body .anchor:focus {
+  outline: none;
+}
+
+.vscode-body p,
+.vscode-body blockquote,
+.vscode-body ul,
+.vscode-body ol,
+.vscode-body dl,
+.vscode-body table,
+.vscode-body pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.vscode-body hr {
+  height: 0.25em;
+  padding: 0;
+  margin: 24px 0;
+  background-color: #e1e4e8;
+  border: 0;
+}
+
+.vscode-body blockquote {
+  padding: 0 1em;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+}
+
+.vscode-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.vscode-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.vscode-body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #444d56;
+  vertical-align: middle;
+  background-color: #fafbfc;
+  border: solid 1px #c6cbd1;
+  border-bottom-color: #959da5;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #959da5;
+}
+
+.vscode-body h1,
+.vscode-body h2,
+.vscode-body h3,
+.vscode-body h4,
+.vscode-body h5,
+.vscode-body h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.vscode-body h1 .octicon-link,
+.vscode-body h2 .octicon-link,
+.vscode-body h3 .octicon-link,
+.vscode-body h4 .octicon-link,
+.vscode-body h5 .octicon-link,
+.vscode-body h6 .octicon-link {
+  color: #1b1f23;
+  vertical-align: middle;
+  visibility: hidden;
+}
+
+.vscode-body h1:hover .anchor,
+.vscode-body h2:hover .anchor,
+.vscode-body h3:hover .anchor,
+.vscode-body h4:hover .anchor,
+.vscode-body h5:hover .anchor,
+.vscode-body h6:hover .anchor {
+  text-decoration: none;
+}
+
+.vscode-body h1:hover .anchor .octicon-link,
+.vscode-body h2:hover .anchor .octicon-link,
+.vscode-body h3:hover .anchor .octicon-link,
+.vscode-body h4:hover .anchor .octicon-link,
+.vscode-body h5:hover .anchor .octicon-link,
+.vscode-body h6:hover .anchor .octicon-link {
+  visibility: visible;
+}
+
+.vscode-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2em;
+  border-bottom: 1px solid #eaecef;
+}
+
+.vscode-body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.5em;
+  border-bottom: 1px solid #eaecef;
+}
+
+.vscode-body h3 {
+  font-size: 1.25em;
+}
+
+.vscode-body h4 {
+  font-size: 1em;
+}
+
+.vscode-body h5 {
+  font-size: 0.875em;
+}
+
+.vscode-body h6 {
+  font-size: 0.85em;
+  color: #6a737d;
+}
+
+.vscode-body ul,
+.vscode-body ol {
+  padding-left: 2em;
+}
+
+.vscode-body ul ul,
+.vscode-body ul ol,
+.vscode-body ol ol,
+.vscode-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.vscode-body li {
+  word-wrap: break-all;
+}
+
+.vscode-body li>p {
+  margin-top: 16px;
+}
+
+.vscode-body li+li {
+  margin-top: 0.25em;
+}
+
+.vscode-body dl {
+  padding: 0;
+}
+
+.vscode-body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.vscode-body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.vscode-body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+}
+
+.vscode-body table th {
+  font-weight: 600;
+}
+
+.vscode-body table th,
+.vscode-body table td {
+  padding: 6px 13px;
+  border: 1px solid #dfe2e5;
+}
+
+.vscode-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #c6cbd1;
+}
+
+.vscode-body table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+.vscode-body img {
+  max-width: 100%;
+  box-sizing: content-box;
+  background-color: #fff;
+}
+
+.vscode-body img[align=right] {
+  padding-left: 20px;
+}
+
+.vscode-body img[align=left] {
+  padding-right: 20px;
+}
+
+.vscode-body code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(27,31,35,0.05);
+  border-radius: 3px;
+}
+
+.vscode-body pre {
+  word-wrap: normal;
+}
+
+.vscode-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.vscode-body .highlight {
+  margin-bottom: 16px;
+}
+
+.vscode-body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.vscode-body .highlight pre,
+.vscode-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f6f8fa;
+  border-radius: 3px;
+}
+
+.vscode-body pre code {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.vscode-body .full-commit .btn-outline:not(:disabled):hover {
+  color: #005cc5;
+  border-color: #005cc5;
+}
+
+.vscode-body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  line-height: 10px;
+  color: #444d56;
+  vertical-align: middle;
+  background-color: #fafbfc;
+  border: solid 1px #d1d5da;
+  border-bottom-color: #c6cbd1;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #c6cbd1;
+}
+
+.vscode-body :checked+.radio-label {
+  position: relative;
+  z-index: 1;
+  border-color: #0366d6;
+}
+
+.vscode-body .task-list-item {
+  list-style-type: none;
+}
+
+.vscode-body .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+.vscode-body .task-list-item input {
+  margin: 0 0.2em 0.25em -1.6em;
+  vertical-align: middle;
+}
+
+.vscode-body hr {
+  border-bottom-color: #eee;
+}
+
+/*
+
+github.com style (c) Vasily Polovnyov <vast@whiteants.net>
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  color: #333;
+  background: #f8f8f8;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #998;
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-subst {
+  color: #333;
+  font-weight: bold;
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag .hljs-attr {
+  color: #008080;
+}
+
+.hljs-string,
+.hljs-doctag {
+  color: #d14;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+  color: #900;
+  font-weight: bold;
+}
+
+.hljs-subst {
+  font-weight: normal;
+}
+
+.hljs-type,
+.hljs-class .hljs-title {
+  color: #458;
+  font-weight: bold;
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-attribute {
+  color: #000080;
+  font-weight: normal;
+}
+
+.hljs-regexp,
+.hljs-link {
+  color: #009926;
+}
+
+.hljs-symbol,
+.hljs-bullet {
+  color: #990073;
+}
+
+.hljs-built_in,
+.hljs-builtin-name {
+  color: #0086b3;
+}
+
+.hljs-meta {
+  color: #999;
+  font-weight: bold;
+}
+
+.hljs-deletion {
+  background: #fdd;
+}
+
+.hljs-addition {
+  background: #dfd;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="アーカイブ操作ツール">アーカイブ操作ツール</h1>
+<p>7-Zipを使用してアーカイブファイルの解凍と圧縮を行うためのバッチファイルとPowerShellスクリプトです。</p>
+<h2 id="機能">機能</h2>
+<h3 id="解凍機能unarchive">解凍機能（unarchive）</h3>
+<ul>
+<li>ZIP、7z、gzip、bzip2、tar、wim、xzなど、7-Zipが対応する様々な形式のアーカイブを解凍</li>
+<li>アーカイブ内のルートフォルダの有無を自動判定</li>
+<li>ルートフォルダがある場合：そのまま解凍</li>
+<li>ルートフォルダがない場合：アーカイブファイル名のフォルダを作成して解凍</li>
+<li>同名フォルダが存在する場合：日時を付与したフォルダ名で解凍</li>
+<li>JSONC設定ファイルによる設定管理</li>
+<li>Windows環境変数の使用に対応</li>
+<li>解凍先フォルダが指定されていない場合：アーカイブファイルと同じ階層に解凍</li>
+</ul>
+<h3 id="圧縮機能archive">圧縮機能（archive）</h3>
+<ul>
+<li>ZIP、7z、gzip、bzip2、tar、wim、xzなど、7-Zipが対応する様々な形式で圧縮</li>
+<li>設定ファイルで圧縮形式を指定可能</li>
+<li>パスワード保護に対応</li>
+<li>ファイルを圧縮する場合：ファイル名と同じ名前のフォルダを作成し、その中にファイルを配置してから圧縮</li>
+<li>同名のアーカイブファイルが存在する場合：日時を付与したファイル名で圧縮</li>
+<li>圧縮先フォルダが指定されていない場合：圧縮対象と同じ階層に圧縮</li>
+</ul>
+<h2 id="ファイル構成">ファイル構成</h2>
+<pre><code>unzip_to_extract/
+├── unarchive.bat                 # 解凍用バッチファイル（エントリーポイント）
+├── unarchive.ps1                 # 解凍用PowerShellスクリプト（メイン処理）
+├── archive.bat                   # 圧縮用バッチファイル（エントリーポイント）
+├── archive.ps1                   # 圧縮用PowerShellスクリプト（メイン処理）
+├── archive_config.jsonc          # 設定ファイル（解凍・圧縮共通）
+└── README.md                     # このファイル
+</code></pre>
+<h2 id="使用方法">使用方法</h2>
+<h3 id="解凍の基本的な使い方">解凍の基本的な使い方</h3>
+<p><strong>推奨方法：ファイルの関連付け設定</strong></p>
+<ol>
+<li>アーカイブファイル（ZIP、7zなど）を右クリック</li>
+<li>「プログラムから開く」→「別のプログラムを選択」を選択</li>
+<li><code>unarchive.bat</code>を選択し、「常にこのアプリを使って.7zファイルを開く」にチェックを入れる</li>
+<li>これで、アーカイブファイルをダブルクリックするだけで自動的に解凍されます</li>
+</ol>
+<p><strong>代替方法：ドラッグ&amp;ドロップ</strong></p>
+<p>アーカイブファイル（ZIP、7zなど）を<code>unarchive.bat</code>にドラッグ&amp;ドロップするだけです。</p>
+<h3 id="圧縮の基本的な使い方">圧縮の基本的な使い方</h3>
+<p><strong>推奨方法：「送る」メニューに登録</strong></p>
+<ol>
+<li>Windowsキー + R を押して「ファイル名を指定して実行」を開く</li>
+<li><code>shell:sendto</code> と入力してEnterキーを押す（「送る」フォルダが開きます）</li>
+<li><code>archive.bat</code>のショートカットを作成し、「送る」フォルダに配置する</li>
+<li>これで、ファイルやフォルダを右クリック→「送る」→「archive.bat」で圧縮できます</li>
+</ol>
+<p><strong>代替方法：ドラッグ&amp;ドロップ</strong></p>
+<p>ファイルまたはフォルダを<code>archive.bat</code>にドラッグ&amp;ドロップするだけです。</p>
+<h3 id="設定ファイルの編集">設定ファイルの編集</h3>
+<p><code>archive_config.jsonc</code>ファイルを編集して、7-Zipのパスや各種設定を変更します。</p>
+<pre><code class="language-jsonc"><span class="hljs-punctuation">{</span>
+  <span class="hljs-comment">// 7-Zipのインストールディレクトリ（環境変数を使用可能）</span>
+  <span class="hljs-attr">&quot;zipExeDir&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;%PROGRAMFILES%\\7-Zip&quot;</span><span class="hljs-punctuation">,</span>
+  
+  <span class="hljs-comment">// 解凍先フォルダ（環境変数を使用可能、空の場合はアーカイブファイルと同じ階層に解凍）</span>
+  <span class="hljs-attr">&quot;destDir&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;%USERPROFILE%\\Downloads&quot;</span><span class="hljs-punctuation">,</span>
+  
+  <span class="hljs-comment">// 圧縮先フォルダ（環境変数を使用可能、空の場合は圧縮対象と同じ階層に圧縮）</span>
+  <span class="hljs-attr">&quot;compressDestDir&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span>
+  
+  <span class="hljs-comment">// 圧縮時のパスワード（オプション、設定しない場合はパスワードなしで圧縮）</span>
+  <span class="hljs-attr">&quot;password&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&quot;</span><span class="hljs-punctuation">,</span>
+  
+  <span class="hljs-comment">// 圧縮形式（7z, zip, gzip, bzip2, tar, wim, xz など、デフォルト: zip）</span>
+  <span class="hljs-attr">&quot;compressFormat&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;zip&quot;</span><span class="hljs-punctuation">,</span>
+  
+  <span class="hljs-comment">// 実行後コンソールが閉じるまでの待機時間（ミリ秒、デフォルト: 3000）</span>
+  <span class="hljs-attr">&quot;closeDelayMs&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3000</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<h4 id="設定項目の説明">設定項目の説明</h4>
+<ul>
+<li><strong>zipExeDir</strong>: 7-Zipのインストールディレクトリを指定します。このディレクトリ内に<code>7z.exe</code>が存在する必要があります。</li>
+<li><strong>destDir</strong>: 解凍先フォルダを指定します。空の場合は、アーカイブファイルと同じ階層に解凍されます。</li>
+<li><strong>compressDestDir</strong>: 圧縮先フォルダを指定します。空の場合は、圧縮対象と同じ階層に圧縮されます。</li>
+<li><strong>password</strong>: 圧縮時のパスワードを指定します。空の場合はパスワードなしで圧縮されます。</li>
+<li><strong>compressFormat</strong>: 圧縮形式を指定します。対応形式：<code>7z</code>, <code>zip</code>, <code>gzip</code>, <code>bzip2</code>, <code>tar</code>, <code>wim</code>, <code>xz</code>。デフォルトは<code>zip</code>です。</li>
+<li><strong>closeDelayMs</strong>: 実行後、コンソールが自動的に閉じるまでの待機時間をミリ秒で指定します。デフォルトは<code>3000</code>（3秒）です。<code>0</code>を指定すると待機しません。</li>
+</ul>
+<h4 id="環境変数の使用">環境変数の使用</h4>
+<p>Windowsの環境変数を使用できます。以下のような環境変数が使用可能です：</p>
+<ul>
+<li><code>%PROGRAMFILES%</code> - プログラムファイルフォルダ（例: <code>C:\Program Files</code>）</li>
+<li><code>%USERPROFILE%</code> - ユーザープロファイルフォルダ（例: <code>C:\Users\username</code>）</li>
+<li><code>%HOMEPATH%</code> - ホームパス（例: <code>\Users\username</code>）</li>
+<li><code>%TEMP%</code> - 一時フォルダ</li>
+<li><code>%APPDATA%</code> - アプリケーションデータフォルダ</li>
+<li>その他のWindows環境変数</li>
+</ul>
+<h4 id="コメントの使用">コメントの使用</h4>
+<p>JSONC形式のため、コメントを追加できます：</p>
+<pre><code class="language-jsonc"><span class="hljs-punctuation">{</span>
+  <span class="hljs-comment">// 行コメント</span>
+  <span class="hljs-attr">&quot;zipExeDir&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;%PROGRAMFILES%\\7-Zip&quot;</span><span class="hljs-punctuation">,</span>
+  
+  <span class="hljs-comment">/* 
+   * ブロックコメント
+   * 複数行にわたる説明を記述できます
+   */</span>
+  <span class="hljs-attr">&quot;destDir&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;%USERPROFILE%\\Downloads&quot;</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<h2 id="動作の詳細">動作の詳細</h2>
+<h3 id="解凍機能の動作">解凍機能の動作</h3>
+<h4 id="ルートフォルダの判定">ルートフォルダの判定</h4>
+<p>アーカイブファイル内の構造を確認し、ルートフォルダの有無を自動判定します：</p>
+<ul>
+<li>
+<p><strong>ルートフォルダがある場合</strong>: 解凍先に直接解凍します</p>
+<ul>
+<li>例: <code>archive.zip</code>（中身: <code>folder\file.txt</code>）→ <code>解凍先\folder\file.txt</code></li>
+</ul>
+</li>
+<li>
+<p><strong>ルートフォルダがない場合</strong>: アーカイブファイル名のフォルダを作成して解凍します</p>
+<ul>
+<li>例: <code>archive.zip</code>（中身: <code>file1.txt</code>, <code>file2.txt</code>）→ <code>解凍先\archive\file1.txt</code>, <code>解凍先\archive\file2.txt</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="同名フォルダの処理">同名フォルダの処理</h4>
+<p>解凍先に同名のフォルダが既に存在する場合：</p>
+<ul>
+<li>警告メッセージを表示</li>
+<li>フォルダ名に日時を付与（形式: <code>フォルダ名_yyyyMMdd_HHmmss</code>）</li>
+<li>新しいフォルダ名で解凍</li>
+</ul>
+<p>例: <code>archive</code>フォルダが既に存在する場合 → <code>archive_20251211_143025</code>として解凍</p>
+<h4 id="解凍先フォルダの指定">解凍先フォルダの指定</h4>
+<ul>
+<li><strong>設定ファイルで指定されている場合</strong>: 指定されたフォルダに解凍（フォルダが存在しない場合はエラー）</li>
+<li><strong>設定ファイルが空の場合</strong>: アーカイブファイルと同じ階層に解凍</li>
+</ul>
+<h3 id="圧縮機能の動作">圧縮機能の動作</h3>
+<h4 id="圧縮形式の指定">圧縮形式の指定</h4>
+<p>設定ファイルの<code>compressFormat</code>で圧縮形式を指定できます。指定した形式に応じて、適切な拡張子が自動的に付与されます：</p>
+<ul>
+<li><code>7z</code> → <code>.7z</code></li>
+<li><code>zip</code> → <code>.zip</code></li>
+<li><code>gzip</code> → <code>.gz</code></li>
+<li><code>bzip2</code> → <code>.bz2</code></li>
+<li><code>tar</code> → <code>.tar</code></li>
+<li><code>wim</code> → <code>.wim</code></li>
+<li><code>xz</code> → <code>.xz</code></li>
+</ul>
+<h4 id="ファイルの圧縮">ファイルの圧縮</h4>
+<p>ファイルを圧縮する場合、以下の処理が行われます：</p>
+<ol>
+<li>ファイル名（拡張子除く）と同じ名前のフォルダを作成</li>
+<li>ファイルをそのフォルダにコピー</li>
+<li>フォルダを圧縮</li>
+<li>圧縮完了後、一時フォルダを削除</li>
+</ol>
+<p>例: <code>document.pdf</code>を圧縮する場合 → <code>document</code>フォルダを作成し、その中に<code>document.pdf</code>を配置してから圧縮</p>
+<h4 id="同名アーカイブファイルの処理">同名アーカイブファイルの処理</h4>
+<p>圧縮先に同名のアーカイブファイルが既に存在する場合：</p>
+<ul>
+<li>警告メッセージを表示</li>
+<li>ファイル名に日時を付与（形式: <code>ファイル名_yyyyMMdd_HHmmss.拡張子</code>）</li>
+<li>新しいファイル名で圧縮</li>
+</ul>
+<p>例: <code>archive.zip</code>が既に存在する場合 → <code>archive_20251211_143025.zip</code>として圧縮</p>
+<h4 id="パスワード保護">パスワード保護</h4>
+<p>設定ファイルの<code>password</code>にパスワードを指定すると、パスワード保護されたアーカイブファイルが作成されます。</p>
+<h4 id="圧縮先フォルダの指定">圧縮先フォルダの指定</h4>
+<ul>
+<li><strong>設定ファイルで指定されている場合</strong>: 指定されたフォルダに圧縮（フォルダが存在しない場合はエラー）</li>
+<li><strong>設定ファイルが空の場合</strong>: 圧縮対象と同じ階層に圧縮</li>
+</ul>
+<h2 id="エラーハンドリング">エラーハンドリング</h2>
+<p>以下の場合にエラーが表示され、処理が停止します：</p>
+<h3 id="解凍時">解凍時</h3>
+<ul>
+<li>7-Zipのディレクトリが存在しない</li>
+<li>7-Zipのディレクトリ内に<code>7z.exe</code>が存在しない</li>
+<li>解凍先フォルダが存在しない（設定ファイルで指定されている場合）</li>
+<li>アーカイブファイルが見つからない</li>
+<li>アーカイブファイルのリスト取得に失敗</li>
+<li>解凍に失敗（パスワードが間違っている場合など）</li>
+</ul>
+<h3 id="圧縮時">圧縮時</h3>
+<ul>
+<li>7-Zipのディレクトリが存在しない</li>
+<li>7-Zipのディレクトリ内に<code>7z.exe</code>が存在しない</li>
+<li>圧縮先フォルダが存在しない（設定ファイルで指定されている場合）</li>
+<li>圧縮対象が見つからない</li>
+<li>圧縮に失敗</li>
+</ul>
+<h2 id="終了時の動作">終了時の動作</h2>
+<ul>
+<li><strong>正常終了時</strong>: 設定ファイルの<code>closeDelayMs</code>で指定された時間（デフォルト: 3秒）後に自動的にコンソールを閉じます</li>
+<li><strong>エラー時</strong>: <code>Enter</code>キーを押すまで待機します（エラーメッセージを確認するため）</li>
+</ul>
+<h2 id="要件">要件</h2>
+<ul>
+<li>Windows 10以降</li>
+<li>PowerShell 5.1以降</li>
+<li>7-Zip（<code>7z.exe</code>が必要）</li>
+</ul>
+<h2 id="トラブルシューティング">トラブルシューティング</h2>
+<h3 id="7-zipが見つからない">7-Zipが見つからない</h3>
+<p>設定ファイルの<code>zipExeDir</code>を確認してください。7-Zipのインストールディレクトリが正しく指定されているか確認してください。</p>
+<h3 id="解凍先フォルダが存在しない">解凍先フォルダが存在しない</h3>
+<p>設定ファイルの<code>destDir</code>で指定したフォルダが存在することを確認してください。存在しない場合は、事前にフォルダを作成するか、<code>destDir</code>を空にしてアーカイブファイルと同じ階層に解凍するように設定してください。</p>
+<h3 id="圧縮先フォルダが存在しない">圧縮先フォルダが存在しない</h3>
+<p>設定ファイルの<code>compressDestDir</code>で指定したフォルダが存在することを確認してください。存在しない場合は、事前にフォルダを作成するか、<code>compressDestDir</code>を空にして圧縮対象と同じ階層に圧縮するように設定してください。</p>
+<h3 id="文字化けが発生する">文字化けが発生する</h3>
+<p>7-Zipの出力はシステムのデフォルトコードページ（通常はShift-JIS）で出力されるため、一部の文字が文字化けする場合があります。これは7-Zipの仕様によるもので、機能には影響しません。</p>
+<h3 id="パスワードが間違っている">パスワードが間違っている</h3>
+<p>解凍時にパスワードが間違っている場合、エラーメッセージが表示されます。正しいパスワードを確認してください。</p>
+<h2 id="ライセンス">ライセンス</h2>
+<p>このツールは自由に使用・改変できます。</p>
+
+            
+            
+        </body>
+        </html>
