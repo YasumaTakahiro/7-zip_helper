@@ -193,7 +193,6 @@ try {
 
     # 圧縮対象がファイルかフォルダかを判定（-LiteralPathを使用して特殊文字を正しく処理）
     $isFile = Test-Path -LiteralPath $targetPath -PathType Leaf
-    $isDirectory = Test-Path -LiteralPath $targetPath -PathType Container
     
     $compressTarget = $targetPath
     $tempFolder = $null
