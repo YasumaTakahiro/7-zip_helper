@@ -6,14 +6,87 @@ $OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = "Stop"
 
 try {
-    # 7z.exe のパス（7-Zipインストールパスに応じて変更）
-    $ZIP_EXE = "C:\Program Files\7-Zip\7z.exe"
+    # スクリプトのディレクトリを引数から取得
+    $scriptDir = $args[0]
+    if ([string]::IsNullOrWhiteSpace($scriptDir)) {
+        # フォールバック: 現在のディレクトリを使用
+        $scriptDir = Get-Location
+    }
+    # 末尾のバックスラッシュを削除
+    $scriptDir = $scriptDir.TrimEnd('\')
+    
+    # JSON設定ファイルのパス（.jsoncまたは.json）
+    $configFile = Join-Path $scriptDir "unzip_to_extract_config.jsonc"
+    if (-not (Test-Path $configFile)) {
+        $configFile = Join-Path $scriptDir "unzip_to_extract_config.json"
+    }
+    
+    # JSON設定ファイルから設定を読み込む
+    $ZIP_EXE_DIR = $null
+    $DEST_DIR = $null
+    
+    if (Test-Path $configFile) {
+        try {
+            # JSONファイルを読み込み、コメントを削除してからパース
+            $jsonContent = Get-Content $configFile -Raw -Encoding UTF8
+            # 行コメント（//）を削除
+            $jsonContent = $jsonContent -replace '//.*', ''
+            # ブロックコメント（/* */）を削除
+            $jsonContent = $jsonContent -replace '/\*[\s\S]*?\*/', ''
+            
+            $config = $jsonContent | ConvertFrom-Json
+            if ($config.zipExeDir) {
+                $ZIP_EXE_DIR = $config.zipExeDir
+                # 環境変数を展開
+                $ZIP_EXE_DIR = [System.Environment]::ExpandEnvironmentVariables($ZIP_EXE_DIR)
+            }
+            if ($config.destDir) {
+                $DEST_DIR = $config.destDir
+                # 環境変数を展開
+                $DEST_DIR = [System.Environment]::ExpandEnvironmentVariables($DEST_DIR)
+            }
+            Write-Host "[INFO] 設定ファイルを読み込みました: $configFile"
+        }
+        catch {
+            Write-Host "[警告] 設定ファイルの読み込みに失敗しました: $($_.Exception.Message)" -ForegroundColor Yellow
+        }
+    } else {
+        Write-Host "[警告] 設定ファイルが見つかりません: $configFile" -ForegroundColor Yellow
+        Write-Host "[警告] デフォルトの設定を使用します。" -ForegroundColor Yellow
+    }
+    
+    # ZIPファイルパスを引数から取得
+    $zipPath = $args[1]
 
-    # 解凍先フォルダ
-    $DEST_DIR = "C:\Users\EIDAI-20240217-2\Downloads"
-
-    # ZIPファイルパスを取得
-    $zipPath = $args[0]
+    if (-not $ZIP_EXE_DIR) {
+        Write-Host "[ERROR] 7-Zipのディレクトリが指定されていません。設定ファイル（unzip_to_extract_config.json）でzipExeDirを指定してください。"
+        pause
+        exit 1
+    }
+    
+    # 7-Zipのディレクトリの存在確認
+    $ZIP_EXE_DIR = $ZIP_EXE_DIR.Trim([char]34)
+    if (-not (Test-Path $ZIP_EXE_DIR)) {
+        Write-Host "[ERROR] 7-Zipのディレクトリが存在しません: $ZIP_EXE_DIR"
+        pause
+        exit 1
+    }
+    if (-not (Test-Path $ZIP_EXE_DIR -PathType Container)) {
+        Write-Host "[ERROR] 7-Zipのパスはディレクトリではありません: $ZIP_EXE_DIR"
+        pause
+        exit 1
+    }
+    
+    # 7z.exeのパスを構築
+    $ZIP_EXE = Join-Path $ZIP_EXE_DIR "7z.exe"
+    
+    # 7z.exeの存在確認
+    if (-not (Test-Path $ZIP_EXE)) {
+        Write-Host "[ERROR] 7z.exeが見つかりません: $ZIP_EXE"
+        Write-Host "[ERROR] 指定されたディレクトリ内に7z.exeが存在しません。"
+        pause
+        exit 1
+    }
 
     if (-not $zipPath) {
         Write-Host "[ERROR] ZIPファイルが指定されていません。"
@@ -23,19 +96,40 @@ try {
 
     # パスを正規化（引用符を削除）
     $zipPath = $zipPath.Trim([char]34)
+    if ($DEST_DIR) {
+        $DEST_DIR = $DEST_DIR.Trim([char]34)
+    }
+    
+    # 解凍先フォルダが空の場合、圧縮ファイルと同じ階層に解凍
+    if ([string]::IsNullOrWhiteSpace($DEST_DIR)) {
+        $DEST_DIR = [System.IO.Path]::GetDirectoryName($zipPath)
+        Write-Host "[INFO] 解凍先フォルダが指定されていないため、ZIPファイルと同じ階層に解凍します: $DEST_DIR"
+    } else {
+        # 解凍先フォルダの存在確認
+        if (-not (Test-Path $DEST_DIR)) {
+            Write-Host "[ERROR] 解凍先フォルダが存在しません: $DEST_DIR"
+            pause
+            exit 1
+        }
+        if (-not (Test-Path $DEST_DIR -PathType Container)) {
+            Write-Host "[ERROR] 解凍先パスはフォルダではありません: $DEST_DIR"
+            pause
+            exit 1
+        }
+    }
 
-    Write-Host "[INFO] ZIPファイル: $zipPath"
+    # 設定情報を表示
+    Write-Host ""
+    Write-Host "[設定情報]"
+    Write-Host "  7-Zipのディレクトリ: $ZIP_EXE_DIR"
+    Write-Host "  7-Zipのパス: $ZIP_EXE"
+    Write-Host "  解凍先フォルダ: $DEST_DIR"
+    Write-Host "  ZIPファイル: $zipPath"
+    Write-Host ""
 
     # ZIPファイルの存在確認
     if (-not (Test-Path $zipPath)) {
         Write-Host "[ERROR] ZIPファイルが見つかりません: $zipPath"
-        pause
-        exit 1
-    }
-
-    # 7z.exeの存在確認
-    if (-not (Test-Path $ZIP_EXE)) {
-        Write-Host "[ERROR] 7z.exeが見つかりません: $ZIP_EXE"
         pause
         exit 1
     }
@@ -187,6 +281,9 @@ try {
     Remove-Item $tempListFile -ErrorAction SilentlyContinue
 
     Write-Host "解凍完了。"
+    Write-Host ""
+    Write-Host "3秒後に自動的に閉じます..."
+    Start-Sleep -Seconds 3
 }
 catch {
     Write-Host "[ERROR] エラーが発生しました: $($_.Exception.Message)"
